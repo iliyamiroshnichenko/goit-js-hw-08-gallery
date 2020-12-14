@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/0.7.0/modern-normalize.min.css"
+    />
+    <!-- <link rel="stylesheet" href="./css/styles.css" /> -->
+    <style>
+      #parent,
+      #child,
+      #inner-child {
+        margin: 1rem;
+        padding: 16px;
+        outline: 1px solid #ffc107;
+        color: #fff;
+        font-weight: 500;
+        font-size: 18px;
+      }
+      #parent {
+        background-color: #673ab7;
+      }
+      #child {
+        background-color: #448aff;
+      }
+      #inner-child {
+        background-color: #009688;
+      }
+      .tags {
+        display: flex;
+        justify-content: center;
+      }
+      .tags__item:not(:last-child) {
+        margin-right: 10px;
+      }
+      .tags__btn {
+        color: #212121;
+        background-color: #fff;
+        border-radius: 6px;
+      }
+      .tags__btn--active {
+        color: #fff;
+        background-color: blue;
+        border-radius: 6px;
+      }
+    </style>
+    <title>Homework 8</title>
+  </head>
+  <body>
+    <div id="parent">
+      PARENT
+      <div id="child">
+        CHILD
+        <div id="inner-child">INNER-CHILD</div>
+      </div>
+    </div>
+    <h1>Делегирование событий</h1>
+    <ul class="tags js-tags">
+      <li class="tags__item">
+        <button class="tags__btn" data-value="html">#html</button>
+      </li>
+      <li class="tags__item">
+        <button class="tags__btn" data-value="css">#css</button>
+      </li>
+      <li class="tags__item">
+        <button class="tags__btn" data-value="javascript">#javascript</button>
+      </li>
+      <li class="tags__item">
+        <button class="tags__btn" data-value="npm">#npm</button>
+      </li>
+      <li class="tags__item">
+        <button class="tags__btn" data-value="webpack">#webpack</button>
+      </li>
+      <li class="tags__item">
+        <button class="tags__btn" data-value="react">#react</button>
+      </li>
+      <li class="tags__item">
+        <button class="tags__btn" data-value="redux">#redux</button>
+      </li>
+      <li class="tags__item">
+        <button class="tags__btn" data-value="nodejs">#nodejs</button>
+      </li>
+    </ul>
+    <p class="js-active-tag"></p>
+    <script src="./js/01/01-bubbling.js" type="module"></script>
+    <script src="./js/01/02-delegation.js" type="module"></script>
+  </body>
+</html>
