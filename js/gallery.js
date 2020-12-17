@@ -1,14 +1,13 @@
 import gallery from "./gallery-items.js";
 
-// Создание и рендер разметки по массиву данных и предоставленному шаблону.
 const refs = {
   galleryList: document.querySelector(".js-gallery"),
   lightBox: document.querySelector(".js-lightbox"),
   bigImg: document.querySelector(".lightbox__image"),
   closeBtn: document.querySelector(".lightbox__button"),
 };
-
-const createElement = ({ preview, original, description }) =>
+// Создание и рендер разметки по массиву данных и предоставленному шаблону.
+const createElement = ({ preview, original, description }, ind) =>
   refs.galleryList.insertAdjacentHTML(
     "beforeend",
     `<li class="gallery__item">
@@ -20,18 +19,21 @@ const createElement = ({ preview, original, description }) =>
       class="gallery__image"
       src=${preview}
       data-source=${original}
+      data-index=${ind}
       alt='${description}'
     />
   </a>
 </li>`
   );
 
-gallery.map((image) => createElement(image));
+let activeIndex;
+gallery.map((image, i) => createElement(image, i));
 
-//Реализация делегирования на галерее ul.js-gallery и получение url большого изображения.
 refs.galleryList.addEventListener("click", onGalleryClick);
-refs.closeBtn.addEventListener('click', onCloseModal);
+refs.closeBtn.addEventListener("click", onCloseModal);
+refs.lightBox.addEventListener("click", onBackdropClick);
 
+// Клик по галерее
 function onGalleryClick(event) {
   event.preventDefault();
   const imgRef = event.target;
@@ -39,22 +41,58 @@ function onGalleryClick(event) {
     return;
   }
   const bigImgURL = imgRef.dataset.source;
-  setBigImgSrc(bigImgURL, imgRef.alt);
+  activeIndex = Number(imgRef.dataset.index);
   onOpenModal();
+  setBigImgSrc(bigImgURL, imgRef.alt);
 }
 
-function setBigImgSrc(url, alt) {
-    refs.bigImg.src = url;
-    refs.bigImg.alt = alt;
-}
-
+// Открытие модалки
 function onOpenModal() {
+  window.addEventListener("keydown", onEscPress);
+  window.addEventListener("keydown", onArrowLeftPress);
+  window.addEventListener("keydown", onArrowRightPress);
   refs.lightBox.classList.add("is-open");
 }
-function onCloseModal() {
-  refs.lightBox.classList.remove("is-open");
-  refs.bigImg.src = '';
-  refs.bigImg.alt = '';
+
+// Вставка большого изображения
+function setBigImgSrc(url, alt) {
+  refs.bigImg.src = url;
+  refs.bigImg.alt = alt;
+}
+// Клик по бекдропу
+function onBackdropClick(event) {
+  if (event.target.nodeName !== "IMG") {
+    onCloseModal();
+  }
 }
 
+// Закрытие модалки
+function onCloseModal() {
+  window.removeEventListener("keydown", onEscPress);
+  window.removeEventListener("keydown", onArrowLeftPress);
+  window.removeEventListener("keydown", onArrowRightPress);
+  refs.lightBox.classList.remove("is-open");
+  refs.bigImg.src = "";
+  refs.bigImg.alt = "";
+}
+// Нажатие Escape
+function onEscPress(event) {
+  if (event.code === "Escape") {
+    onCloseModal();
+  }
+}
 
+function onArrowLeftPress(event) {
+  if (event.code === "ArrowLeft") {
+    activeIndex = activeIndex === 0 ? gallery.length - 1 : activeIndex - 1;
+    refs.bigImg.src = gallery[activeIndex].original;
+    refs.bigImg.alt = gallery[activeIndex].description;
+  }
+}
+function onArrowRightPress(event) {
+  if (event.code === "ArrowRight") {
+    activeIndex = activeIndex === gallery.length - 1 ? 0 : activeIndex + 1;
+    refs.bigImg.src = gallery[activeIndex].original;
+    refs.bigImg.alt = gallery[activeIndex].description;
+  }
+}
