@@ -27,7 +27,7 @@ const createElement = ({ preview, original, description }, ind) =>
   );
 
 let activeIndex;
-gallery.map((image, i) => createElement(image, i));
+gallery.map((image, ind) => createElement(image, ind));
 
 refs.galleryList.addEventListener("click", onGalleryClick);
 refs.closeBtn.addEventListener("click", onCloseModal);
